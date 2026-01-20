@@ -24,15 +24,27 @@
             <label>フィルター:</label>
             <select id="departmentFilter" onchange="filterReports()">
                 <option value="">全部署</option>
-                <option value="内科">内科</option>
-                <option value="外科">外科</option>
-                <option value="小児科">小児科</option>
-                <option value="産婦人科">産婦人科</option>
-                <option value="整形外科">整形外科</option>
-                <option value="救急科">救急科</option>
-                <option value="ICU">ICU</option>
+                <option value="外来">外来</option>
+                <option value="１階病棟">１階病棟</option>
+                <option value="２階病棟">２階病棟</option>
+                <option value="３階病棟">３階病棟</option>
+                <option value="救急外来">救急外来</option>
                 <option value="手術室">手術室</option>
-                <option value="薬剤部">薬剤部</option>
+                <option value="臨床検査室">臨床検査室</option>
+                <option value="内視鏡室">内視鏡室</option>
+                <option value="放射線科">放射線科</option>
+            </select>
+            
+            <select id="incidentTypeFilter" onchange="filterReports()">
+                <option value="">全種類</option>
+                <option value="転倒・転落">転倒・転落</option>
+                <option value="与薬・服薬関係">与薬・服薬関係</option>
+                <option value="指示・情報関係">指示・情報関係</option>
+                <option value="ドレーン・チューブ関係">ドレーン・チューブ関係</option>
+                <option value="手術・麻酔関係">手術・麻酔関係</option>
+                <option value="麻薬関係">麻薬関係</option>
+                <option value="暴言・暴力行為">暴言・暴力行為</option>
+                <option value="その他">その他</option>
             </select>
             
             <select id="impactLevelFilter" onchange="filterReports()">

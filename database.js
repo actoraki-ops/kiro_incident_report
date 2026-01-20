@@ -158,6 +158,8 @@ class FAQDatabase {
     // 新しいインシデントレポートを追加
     async addIncident(incidentData) {
         try {
+            console.log('API呼び出し - インシデントレポート追加:', incidentData);
+            
             const response = await fetch('/api/incidents', {
                 method: 'POST',
                 headers: {
@@ -166,11 +168,17 @@ class FAQDatabase {
                 body: JSON.stringify(incidentData)
             });
 
+            console.log('APIレスポンス status:', response.status);
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                console.error('APIエラーレスポンス:', errorData);
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
             }
 
-            return await response.json();
+            const result = await response.json();
+            console.log('APIレスポンス成功:', result);
+            return result;
         } catch (error) {
             console.error('インシデントレポート追加エラー:', error);
             throw error;

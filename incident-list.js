@@ -54,6 +54,10 @@ function displayReports(reports) {
                         <span>${escapeHtml(report.incident_location)}</span>
                     </div>
                     <div class="report-meta-item">
+                        <span class="report-meta-label">インシデントの種類</span>
+                        <span>${escapeHtml(report.incident_type || 'その他')}</span>
+                    </div>
+                    <div class="report-meta-item">
                         <span class="report-meta-label">報告者</span>
                         <span>${escapeHtml(report.reporter_job)} (${escapeHtml(report.department)})</span>
                     </div>
@@ -141,12 +145,17 @@ async function searchReports() {
 // フィルターを適用
 function applyFilters(reports) {
     const departmentFilter = document.getElementById('departmentFilter').value;
+    const incidentTypeFilter = document.getElementById('incidentTypeFilter').value;
     const impactLevelFilter = document.getElementById('impactLevelFilter').value;
     
     let filtered = reports;
     
     if (departmentFilter) {
         filtered = filtered.filter(report => report.department === departmentFilter);
+    }
+    
+    if (incidentTypeFilter) {
+        filtered = filtered.filter(report => report.incident_type === incidentTypeFilter);
     }
     
     if (impactLevelFilter) {
@@ -179,6 +188,7 @@ async function filterReports() {
 function clearSearch() {
     document.getElementById('searchInput').value = '';
     document.getElementById('departmentFilter').value = '';
+    document.getElementById('incidentTypeFilter').value = '';
     document.getElementById('impactLevelFilter').value = '';
     loadAllReports();
 }

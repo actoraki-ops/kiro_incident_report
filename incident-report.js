@@ -19,6 +19,8 @@ function setupForm() {
 async function submitReport() {
     const formData = getFormData();
     
+    console.log('提出するフォームデータ:', formData);
+    
     if (!validateForm(formData)) {
         return;
     }
@@ -38,7 +40,14 @@ async function submitReport() {
         }
     } catch (error) {
         console.error('レポート提出エラー:', error);
-        alert('レポートの提出に失敗しました。もう一度お試しください。');
+        
+        // エラーの詳細を表示
+        let errorMessage = 'レポートの提出に失敗しました。';
+        if (error.message) {
+            errorMessage += '\n詳細: ' + error.message;
+        }
+        
+        alert(errorMessage + '\n\nもう一度お試しください。');
     } finally {
         showLoading(false);
     }
@@ -52,11 +61,12 @@ function getFormData() {
         birth_date: document.getElementById('birthDate').value,
         gender: document.getElementById('gender').value,
         reporter_job: document.getElementById('reporterJob').value,
-        department: document.getElementById('department').value.trim(),
+        department: document.getElementById('department').value,
         experience_years: document.getElementById('experienceYears').value ? parseInt(document.getElementById('experienceYears').value) : null,
         reporter_type: document.getElementById('reporterType').value,
         incident_datetime: document.getElementById('incidentDatetime').value,
         incident_location: document.getElementById('incidentLocation').value.trim(),
+        incident_type: document.getElementById('incidentType').value,
         incident_situation: document.getElementById('incidentSituation').value.trim(),
         response_action: document.getElementById('responseAction').value.trim(),
         cause_factor: document.getElementById('causeFactor').value.trim(),
@@ -67,23 +77,24 @@ function getFormData() {
 // フォームバリデーション
 function validateForm(data) {
     const requiredFields = [
-        { field: 'patient_name', name: '患者氏名' },
-        { field: 'gender', name: '性別' },
-        { field: 'reporter_job', name: '報告者職種' },
-        { field: 'department', name: '部署' },
-        { field: 'reporter_type', name: '報告者区分' },
-        { field: 'incident_datetime', name: '発生日時' },
-        { field: 'incident_location', name: '発生場所' },
-        { field: 'incident_situation', name: '発生状況' },
-        { field: 'response_action', name: '対応' },
-        { field: 'cause_factor', name: '要因' },
-        { field: 'impact_level', name: '影響度分類レベル' }
+        { field: 'patient_name', name: '患者氏名', elementId: 'patientName' },
+        { field: 'gender', name: '性別', elementId: 'gender' },
+        { field: 'reporter_job', name: '報告者職種', elementId: 'reporterJob' },
+        { field: 'department', name: '部署', elementId: 'department' },
+        { field: 'reporter_type', name: '報告者区分', elementId: 'reporterType' },
+        { field: 'incident_datetime', name: '発生日時', elementId: 'incidentDatetime' },
+        { field: 'incident_location', name: '発生場所', elementId: 'incidentLocation' },
+        { field: 'incident_type', name: 'インシデントの種類', elementId: 'incidentType' },
+        { field: 'incident_situation', name: '発生状況', elementId: 'incidentSituation' },
+        { field: 'response_action', name: '対応', elementId: 'responseAction' },
+        { field: 'cause_factor', name: '要因', elementId: 'causeFactor' },
+        { field: 'impact_level', name: '影響度分類レベル', elementId: 'impactLevel' }
     ];
     
-    for (const { field, name } of requiredFields) {
+    for (const { field, name, elementId } of requiredFields) {
         if (!data[field] || data[field] === '') {
             alert(`${name}は必須項目です。`);
-            document.getElementById(field.replace('_', '')).focus();
+            document.getElementById(elementId).focus();
             return false;
         }
     }
@@ -125,8 +136,27 @@ function loadDraftIfExists() {
 
 // フォームにデータを読み込み
 function loadFormData(data) {
+    const fieldMapping = {
+        'patient_id': 'patientId',
+        'patient_name': 'patientName',
+        'birth_date': 'birthDate',
+        'gender': 'gender',
+        'reporter_job': 'reporterJob',
+        'department': 'department',
+        'experience_years': 'experienceYears',
+        'reporter_type': 'reporterType',
+        'incident_datetime': 'incidentDatetime',
+        'incident_location': 'incidentLocation',
+        'incident_type': 'incidentType',
+        'incident_situation': 'incidentSituation',
+        'response_action': 'responseAction',
+        'cause_factor': 'causeFactor',
+        'impact_level': 'impactLevel'
+    };
+    
     Object.keys(data).forEach(key => {
-        const element = document.getElementById(key.replace('_', ''));
+        const elementId = fieldMapping[key];
+        const element = document.getElementById(elementId);
         if (element && data[key] !== null && data[key] !== '') {
             element.value = data[key];
         }

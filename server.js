@@ -38,7 +38,7 @@ app.get('/incident-list', (req, res) => {
     res.sendFile(path.join(__dirname, 'incident-list.html'));
 });
 
-// API エンドポイント
+// FAQ API エンドポイント
 
 // 全FAQを取得
 app.get('/api/faqs', (req, res) => {
@@ -201,6 +201,7 @@ app.delete('/api/faqs/:id', (req, res) => {
         }
         
         res.json({ message: 'FAQが正常に削除されました', deletedId: id });
+    });
 });
 
 // インシデントレポート API エンドポイント
@@ -262,16 +263,46 @@ app.get('/api/incidents/search/:keyword', (req, res) => {
 
 // 新しいインシデントレポートを追加
 app.post('/api/incidents', (req, res) => {
+    console.log('インシデントレポート追加リクエスト受信:', req.body);
+    
     const {
         patient_id, patient_name, birth_date, gender, reporter_job, department,
         experience_years, reporter_type, incident_datetime, incident_location,
-        incident_situation, response_action, cause_factor, impact_level
+        incident_type, incident_situation, response_action, cause_factor, impact_level
     } = req.body;
     
-    if (!patient_name || !gender || !reporter_job || !department || !reporter_type ||
-        !incident_datetime || !incident_location || !incident_situation ||
-        !response_action || !cause_factor || impact_level === undefined) {
-        res.status(400).json({ error: '必要な項目が不足しています' });
+    // 必須フィールドのチェック
+    const requiredFields = {
+        patient_name: '患者氏名',
+        gender: '性別',
+        reporter_job: '報告者職種',
+        department: '部署',
+        reporter_type: '報告者区分',
+        incident_datetime: '発生日時',
+        incident_location: '発生場所',
+        incident_type: 'インシデントの種類',
+        incident_situation: '発生状況',
+        response_action: '対応',
+        cause_factor: '要因'
+    };
+    
+    const missingFields = [];
+    Object.keys(requiredFields).forEach(field => {
+        if (!req.body[field] || req.body[field] === '') {
+            missingFields.push(requiredFields[field]);
+        }
+    });
+    
+    if (impact_level === undefined || impact_level === '') {
+        missingFields.push('影響度分類レベル');
+    }
+    
+    if (missingFields.length > 0) {
+        console.log('必須フィールドが不足:', missingFields);
+        res.status(400).json({ 
+            error: '必要な項目が不足しています', 
+            missingFields: missingFields 
+        });
         return;
     }
     
@@ -279,29 +310,50 @@ app.post('/api/incidents', (req, res) => {
         INSERT INTO incident_reports (
             patient_id, patient_name, birth_date, gender, reporter_job, department,
             experience_years, reporter_type, incident_datetime, incident_location,
-            incident_situation, response_action, cause_factor, impact_level,
+            incident_type, incident_situation, response_action, cause_factor, impact_level,
             created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     `;
     
-    db.run(sql, [
-        patient_id, patient_name, birth_date, gender, reporter_job, department,
-        experience_years, reporter_type, incident_datetime, incident_location,
-        incident_situation, response_action, cause_factor, impact_level
-    ], function(err) {
+    const params = [
+        patient_id || null, 
+        patient_name.trim(), 
+        birth_date || null, 
+        gender, 
+        reporter_job, 
+        department,
+        experience_years || null, 
+        reporter_type, 
+        incident_datetime, 
+        incident_location.trim(),
+        incident_type,
+        incident_situation.trim(), 
+        response_action.trim(), 
+        cause_factor.trim(), 
+        impact_level
+    ];
+    
+    console.log('SQL実行パラメータ:', params);
+    
+    db.run(sql, params, function(err) {
         if (err) {
             console.error('インシデントレポート追加エラー:', err.message);
-            res.status(500).json({ error: 'データベースエラー' });
+            console.error('SQL:', sql);
+            console.error('パラメータ:', params);
+            res.status(500).json({ error: 'データベースエラー: ' + err.message });
             return;
         }
+        
+        console.log('インシデントレポート追加成功, ID:', this.lastID);
         
         // 追加されたレポートを取得して返す
         db.get('SELECT * FROM incident_reports WHERE id = ?', [this.lastID], (err, row) => {
             if (err) {
                 console.error('インシデントレポート取得エラー:', err.message);
-                res.status(500).json({ error: 'データベースエラー' });
+                res.status(500).json({ error: 'データベースエラー: ' + err.message });
                 return;
             }
+            console.log('追加されたレポート:', row);
             res.status(201).json(row);
         });
     });
@@ -325,7 +377,6 @@ app.delete('/api/incidents/:id', (req, res) => {
         }
         
         res.json({ message: 'インシデントレポートが正常に削除されました', deletedId: id });
-    });
     });
 });
 
