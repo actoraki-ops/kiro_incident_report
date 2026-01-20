@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ管理画面</title>
+    <link rel="stylesheet" href="style.css?v=2.0">
+</head>
+<body>
+    <header>
+        <h1>🔧 FAQ管理画面</h1>
+        <a href="index.html" class="back-link">← メイン画面に戻る</a>
+    </header>
+
+    <main>
+        <div class="admin-section">
+            <h2>新しいFAQを追加</h2>
+            <form id="addFaqForm">
+                <div class="form-group">
+                    <label for="category">カテゴリ:</label>
+                    <select id="category" required>
+                        <option value="">選択してください</option>
+                        <option value="インシデント分類">インシデント分類</option>
+                        <option value="レポート作成方法">レポート作成方法</option>
+                        <option value="緊急時対応">緊急時対応</option>
+                        <option value="システム操作">システム操作</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="question">質問:</label>
+                    <textarea id="question" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="answer">回答:</label>
+                    <textarea id="answer" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit">追加</button>
+                <button type="button" onclick="clearForm()">クリア</button>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h2>既存のFAQ管理</h2>
+            <div id="adminFaqList">
+                <!-- 管理用FAQ一覧がここに表示されます -->
+            </div>
+        </div>
+    </main>
+
+    <script src="database.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

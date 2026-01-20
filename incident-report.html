@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インシデントレポート作成</title>
+    <link rel="stylesheet" href="style.css?v=2.0">
+</head>
+<body>
+    <header>
+        <h1>📝 インシデントレポート作成</h1>
+        <p>医療安全向上のための報告書</p>
+        <a href="index.html" class="back-link">← メイン画面に戻る</a>
+    </header>
+
+    <main>
+        <div class="admin-section">
+            <h2>基本情報</h2>
+            <form id="incidentReportForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientId">患者ID:</label>
+                        <input type="text" id="patientId" placeholder="患者IDを入力">
+                    </div>
+                    <div class="form-group">
+                        <label for="patientName">患者氏名: *</label>
+                        <input type="text" id="patientName" required placeholder="患者氏名を入力">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="birthDate">生年月日:</label>
+                        <input type="date" id="birthDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">性別: *</label>
+                        <select id="gender" required>
+                            <option value="">選択してください</option>
+                            <option value="男性">男性</option>
+                            <option value="女性">女性</option>
+                            <option value="その他">その他</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reporterJob">報告者職種: *</label>
+                        <select id="reporterJob" required>
+                            <option value="">選択してください</option>
+                            <option value="医師">医師</option>
+                            <option value="看護師">看護師</option>
+                            <option value="薬剤師">薬剤師</option>
+                            <option value="臨床検査技師">臨床検査技師</option>
+                            <option value="診療放射線技師">診療放射線技師</option>
+                            <option value="理学療法士">理学療法士</option>
+                            <option value="作業療法士">作業療法士</option>
+                            <option value="その他">その他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">部署: *</label>
+                        <input type="text" id="department" required placeholder="所属部署を入力">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="experienceYears">経験年数:</label>
+                        <input type="number" id="experienceYears" min="0" max="50" placeholder="年数を入力">
+                    </div>
+                    <div class="form-group">
+                        <label for="reporterType">報告者区分: *</label>
+                        <select id="reporterType" required>
+                            <option value="">選択してください</option>
+                            <option value="当事者">当事者</option>
+                            <option value="発見者">発見者</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h2>インシデントの概要</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="incidentDatetime">発生日時: *</label>
+                        <input type="datetime-local" id="incidentDatetime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="incidentLocation">発生場所: *</label>
+                        <input type="text" id="incidentLocation" required placeholder="発生場所を入力">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="incidentSituation">発生状況: *</label>
+                    <textarea id="incidentSituation" rows="4" required placeholder="発生状況を詳しく記載してください"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="responseAction">対応: *</label>
+                    <textarea id="responseAction" rows="3" required placeholder="実施した対応を記載してください"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="causeFactor">要因: *</label>
+                    <textarea id="causeFactor" rows="3" required placeholder="インシデントの要因を記載してください"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="impactLevel">影響度分類レベル: *</label>
+                    <select id="impactLevel" required>
+                        <option value="">選択してください</option>
+                        <option value="0">レベル0: エラーや医薬品・医療用具の不具合が生じたが、患者には実施されなかった</option>
+                        <option value="1">レベル1: 患者に到達したが、実害はなかった</option>
+                        <option value="2">レベル2: 処置や治療は行わなかった（患者観察の強化、バイタルサインの軽度変化）</option>
+                        <option value="3a">レベル3a: 簡単な処置や治療を要した（消毒、湿布、鎮痛剤投与等）</option>
+                        <option value="3b">レベル3b: 濃厚な処置や治療を要した（バイタルサインの高度変化、人工呼吸器装着等）</option>
+                        <option value="4">レベル4: 永続的な障害や後遺症が残ったが、生命に影響はなかった</option>
+                        <option value="5">レベル5: 死亡（原因と結果の関係は問わない）</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">レポートを提出</button>
+                    <button type="button" onclick="clearForm()">クリア</button>
+                    <button type="button" onclick="saveDraft()">下書き保存</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="database.js"></script>
+    <script src="incident-report.js"></script>
+</body>
+</html>

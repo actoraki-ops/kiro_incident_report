@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インシデントレポート一覧</title>
+    <link rel="stylesheet" href="style.css?v=2.0">
+</head>
+<body>
+    <header>
+        <h1>📊 インシデントレポート一覧</h1>
+        <p>提出されたインシデントレポートの管理</p>
+        <a href="index.html" class="back-link">← メイン画面に戻る</a>
+    </header>
+
+    <main>
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="患者名、部署、発生場所で検索...">
+            <button onclick="searchReports()">検索</button>
+            <button onclick="clearSearch()">クリア</button>
+        </div>
+
+        <div class="category-filter">
+            <label>フィルター:</label>
+            <select id="departmentFilter" onchange="filterReports()">
+                <option value="">全部署</option>
+                <option value="内科">内科</option>
+                <option value="外科">外科</option>
+                <option value="小児科">小児科</option>
+                <option value="産婦人科">産婦人科</option>
+                <option value="整形外科">整形外科</option>
+                <option value="救急科">救急科</option>
+                <option value="ICU">ICU</option>
+                <option value="手術室">手術室</option>
+                <option value="薬剤部">薬剤部</option>
+            </select>
+            
+            <select id="impactLevelFilter" onchange="filterReports()">
+                <option value="">全レベル</option>
+                <option value="0">レベル0</option>
+                <option value="1">レベル1</option>
+                <option value="2">レベル2</option>
+                <option value="3a">レベル3a</option>
+                <option value="3b">レベル3b</option>
+                <option value="4">レベル4</option>
+                <option value="5">レベル5</option>
+            </select>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <h3>総レポート数</h3>
+                <span id="totalReports">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>今月の報告</h3>
+                <span id="monthlyReports">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>高レベル事例</h3>
+                <span id="highLevelReports">0</span>
+            </div>
+        </div>
+
+        <div id="reportsContainer">
+            <!-- レポート一覧がここに表示されます -->
+        </div>
+    </main>
+
+    <script src="database.js"></script>
+    <script src="incident-list.js"></script>
+</body>
+</html>
