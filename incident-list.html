@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>📊 インシデントレポート一覧</h1>
+        <h1><span class="emoji-pulse">📊</span> インシデントレポート一覧</h1>
         <p>提出されたインシデントレポートの管理</p>
         <a href="index.html" class="back-link">← メイン画面に戻る</a>
     </header>
@@ -21,7 +21,7 @@
         </div>
 
         <div class="category-filter">
-            <label>フィルター:</label>
+            <label><span class="emoji-pulse">🔍</span> フィルター:</label>
             <select id="departmentFilter" onchange="filterReports()">
                 <option value="">全部署</option>
                 <option value="外来">外来</option>
@@ -61,15 +61,15 @@
 
         <div class="stats-section">
             <div class="stat-card">
-                <h3>総レポート数</h3>
+                <h3><span class="emoji-pulse emoji-delay-1">📈</span> 総レポート数</h3>
                 <span id="totalReports">0</span>
             </div>
             <div class="stat-card">
-                <h3>今月の報告</h3>
+                <h3><span class="emoji-bounce emoji-delay-2">📅</span> 今月の報告</h3>
                 <span id="monthlyReports">0</span>
             </div>
             <div class="stat-card">
-                <h3>高レベル事例</h3>
+                <h3><span class="emoji-shake emoji-delay-3">⚠️</span> 高レベル事例</h3>
                 <span id="highLevelReports">0</span>
             </div>
         </div>

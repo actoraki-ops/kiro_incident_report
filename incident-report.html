@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>📝 インシデントレポート作成</h1>
+        <h1><span class="emoji-float">📝</span> インシデントレポート作成</h1>
         <p>医療安全向上のための報告書</p>
         <a href="index.html" class="back-link">← メイン画面に戻る</a>
     </header>
@@ -131,7 +131,17 @@
 
                 <div class="form-group">
                     <label for="causeFactor">要因: *</label>
-                    <textarea id="causeFactor" rows="3" required placeholder="インシデントの要因を記載してください"></textarea>
+                    <select id="causeFactor" required>
+                        <option value="">選択してください</option>
+                        <option value="うっかりミス">うっかりミス</option>
+                        <option value="知識不足">知識不足</option>
+                        <option value="疲労">疲労</option>
+                        <option value="不注意">不注意</option>
+                        <option value="医療機器の不具合">医療機器の不具合</option>
+                        <option value="マニュアルの不備">マニュアルの不備</option>
+                        <option value="情報伝達ミス">情報伝達ミス</option>
+                        <option value="人員不足">人員不足</option>  
+                    </select>
                 </div>
 
                 <div class="form-group">
